@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Dia dos Namorados - Maribella</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* TEMA DARK ROSA CLARINHO (Fundo escuro vinho/mauve com luzes rosa claro) */
+            --bg-deep: #14080e; 
+            --glass-bg: rgba(30, 15, 22, 0.6); 
+            --glass-border: rgba(255, 143, 163, 0.2);
+            --pink-neon: #ff4d6d; 
+            --pink-soft: #ffb3c6; 
+            --gold-accent: #f7aef8; /* Rose gold em vez de amarelo */
+            --text-main: #fdfbf7;
+            --text-muted: #c9b1b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            line-height: 1.8;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, rgba(255, 77, 109, 0.08) 0%, transparent 70%);
+        }
+
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        .script { font-family: 'Dancing Script', cursive; }
+
+        /* --- BACKGROUND MÁGICO --- */
+        .magic-dust {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 0;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.25; animation: moveDust 100s linear infinite;
+        }
+        @keyframes moveDust { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
+
+        /* --- ESTÁGIO 1: TELA INICIAL (HOME) --- */
+        #landing-page {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: var(--bg-deep);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 2000; transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 77, 109, 0.15) 0%, transparent 80%);
+        }
+
+        .eye-container { position: relative; margin-bottom: 30px; animation: float 4s ease-in-out infinite; }
+        .eye-photo {
+            width: 90vw; max-width: 500px; border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(255, 77, 109, 0.3);
+            border: 4px solid var(--pink-soft); object-fit: cover;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        /* PLAY MUSIC BTN HOME */
+        .play-home-btn {
+            background: rgba(255, 77, 109, 0.2); border: 1px solid var(--pink-soft);
+            color: var(--pink-soft); padding: 10px 25px; border-radius: 30px;
+            font-family: 'Montserrat', sans-serif; cursor: pointer; margin-bottom: 25px;
+            transition: all 0.3s; backdrop-filter: blur(5px);
+        }
+        .play-home-btn:hover { background: var(--pink-neon); color: #fff; box-shadow: 0 0 15px var(--pink-neon); }
+
+        /* CONTADOR */
+        .counter-container {
+            text-align: center; margin-bottom: 40px; background: rgba(30, 15, 22, 0.8);
+            padding: 20px 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
+        }
+        .counter-title { font-size: 1.2rem; color: var(--pink-soft); margin-bottom: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+        .counter { display: flex; gap: 20px; justify-content: center; }
+        .counter-box { display: flex; flex-direction: column; align-items: center; }
+        .counter-box span { font-size: 3rem; font-weight: 700; color: #fff; font-family: 'Playfair Display', serif; line-height: 1; text-shadow: 0 0 10px var(--pink-neon); }
+        .counter-box label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-top: 5px; }
+
+        .btn-acessar {
+            background: transparent; color: var(--pink-soft); border: 2px solid var(--pink-soft);
+            padding: 15px 50px; font-size: 1.5rem; font-family: 'Montserrat', sans-serif; font-weight: 700;
+            border-radius: 50px; cursor: pointer; transition: all 0.3s ease; letter-spacing: 3px;
+        }
+        .btn-acessar:hover {
+            background: var(--pink-neon); color: white; border-color: var(--pink-neon);
+            box-shadow: 0 0 30px var(--pink-neon); transform: scale(1.05);
+        }
+
+        /* --- ESTÁGIO 2: CONTEÚDO PRINCIPAL ULTIMATE --- */
+        #main-content { display: none; opacity: 0; transition: opacity 1s ease-in-out; position: relative; z-index: 2; }
+
+        /* ANIMAÇÕES DE ENTRADA */
+        .reveal { opacity: 0; transform: translateY(50px) scale(0.98); transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
+
+        /* HERO SECTION */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; }
+        .hero-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://i.ibb.co/PsRCn06F/IMG-20260531-WA0542.png') center/cover no-repeat;
+            filter: brightness(0.3) saturate(1.2); z-index: -1; transform: scale(1.05);
+            animation: breathe 20s infinite alternate ease-in-out;
+        }
+        @keyframes breathe { from { transform: scale(1.05); } to { transform: scale(1.15); } }
+
+        .hero h3 { font-size: 1.3rem; color: var(--pink-soft); letter-spacing: 8px; text-transform: uppercase; margin-bottom: 10px; text-shadow: 0 0 15px var(--pink-neon); }
+        .hero h1 { font-size: 6rem; color: #fff; text-shadow: 0 0 30px rgba(255, 77, 109, 0.8), 0 5px 10px rgba(0,0,0,0.8); line-height: 1.1; margin-bottom: 5px; }
+        .hero .subtitle { font-size: 2.2rem; color: var(--gold-accent); margin-bottom: 40px; }
+
+        /* CONTAINER E LAYOUT LADO A LADO */
+        .container { max-width: 1200px; margin: 0 auto; padding: 100px 20px; position: relative; }
+        .split-section { display: flex; flex-wrap: wrap; align-items: center; gap: 60px; margin-bottom: 150px; }
+        .split-section:nth-child(even) { flex-direction: row-reverse; }
+
+        /* IMAGENS FLUTUANTES */
+        .img-wrapper { flex: 1; min-width: 320px; position: relative; }
+        .img-wrapper img {
+            width: 100%; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(255, 77, 109, 0.2);
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); position: relative; z-index: 2;
+        }
+        .img-wrapper::after {
+            content: ''; position: absolute; top: 20px; left: -20px; width: 100%; height: 100%;
+            border: 2px solid var(--pink-soft); border-radius: 20px; z-index: 1; opacity: 0.5;
+        }
+        .split-section:nth-child(even) .img-wrapper::after { left: 20px; }
+        .img-wrapper:hover img { transform: translateY(-10px) scale(1.02); }
+
+        /* TEXTOS GLASSMORPHISM */
+        .text-content {
+            flex: 1.2; min-width: 320px; background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 50px; border-radius: 24px; border: 1px solid var(--glass-border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 0 20px rgba(255, 77, 109, 0.05);
+            position: relative; overflow: hidden;
+        }
+        .text-content h2 { font-size: 3rem; color: var(--pink-soft); margin-bottom: 25px; text-shadow: 0 0 15px rgba(255, 179, 198, 0.2); }
+        .text-content p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 20px; text-align: justify; }
+        .highlight { color: var(--pink-neon); font-weight: 600; text-shadow: 0 0 10px rgba(255, 77, 109, 0.3); }
+
+        /* VÍDEO (CELULAR CINEMATIC) */
+        .video-showcase { text-align: center; margin-bottom: 150px; position: relative; }
+        .video-showcase h2 { font-size: 4rem; color: var(--text-main); margin-bottom: 10px; text-shadow: 0 0 20px var(--pink-neon); }
+        .video-showcase p { color: var(--pink-soft); font-size: 1.3rem; margin-bottom: 40px; font-style: italic; }
+        
+        .phone-frame {
+            max-width: 380px; margin: 0 auto; border: 8px solid #000; border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 50px rgba(255, 77, 109, 0.2);
+            overflow: hidden; position: relative; background: #000;
+        }
+        .phone-frame::after {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 120px; height: 25px; background: #000; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; z-index: 10;
+        }
+        .phone-frame video { width: 100%; display: block; object-fit: cover; }
+
+        /* LISTA DE PROMESSAS (DARK STYLE) */
+        .promises-box {
+            background: linear-gradient(135deg, rgba(20, 8, 14, 0.8), rgba(30, 15, 22, 0.9));
+            border: 1px solid var(--glass-border); padding: 60px 40px; border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); margin-bottom: 150px; position: relative;
+        }
+        .promises-box h2 { font-size: 3.5rem; color: var(--pink-soft); text-align: center; margin-bottom: 40px; line-height: 1.2; text-shadow: 0 0 15px rgba(255, 179, 198, 0.3); }
+        .promises-list { list-style: none; max-width: 700px; margin: 0 auto; }
+        .promises-list li {
+            font-size: 1.25rem; color: var(--text-main); margin-bottom: 15px; display: flex; align-items: flex-start; gap: 15px;
+            padding: 10px 15px; border-radius: 10px; transition: background 0.3s;
+        }
+        .promises-list li:hover { background: rgba(255, 77, 109, 0.1); }
+        .promises-list li i { color: var(--pink-neon); font-size: 1.2rem; margin-top: 6px; text-shadow: 0 0 8px var(--pink-neon); }
+        .promise-finale { text-align: center; font-size: 2rem; color: var(--gold-accent); margin-top: 40px; font-weight: bold; font-style: italic; }
+
+        /* CARTAS GLOW POÉTICAS */
+        .cinematic-letter {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 60px 50px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            margin: 0 auto 150px auto; max-width: 900px; text-align: center; position: relative;
+            backdrop-filter: blur(15px);
+        }
+        .cinematic-letter i.fa-quote-left { font-size: 3rem; color: rgba(255, 77, 109, 0.3); margin-bottom: 20px; }
+        .cinematic-letter h3 { font-size: 2.5rem; color: var(--pink-soft); margin-bottom: 25px; }
+        .cinematic-letter p { font-size: 1.25rem; color: var(--text-muted); line-height: 2; margin-bottom: 25px; text-align: justify; }
+        .big-quote { font-size: 2rem; color: var(--gold-accent); margin: 40px 0; font-style: italic; text-shadow: 0 0 15px rgba(247, 174, 248, 0.3); line-height: 1.4; }
+
+        /* GRID CARDS MODERNOS */
+        .reasons-title { text-align: center; font-size: 4rem; color: var(--pink-soft); margin-bottom: 60px; }
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 150px; }
+        .card { background: rgba(20, 8, 14, 0.6); padding: 40px 30px; border-radius: 20px; text-align: center; border-bottom: 3px solid transparent; transition: all 0.4s ease; backdrop-filter: blur(10px); }
+        .card:hover { transform: translateY(-15px); border-bottom: 3px solid var(--pink-neon); background: rgba(30, 15, 22, 0.8); box-shadow: 0 20px 40px rgba(255, 77, 109, 0.15); }
+        .card i { font-size: 3rem; color: var(--pink-neon); margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,77,109,0.5)); }
+        .card h3 { font-size: 1.8rem; color: #fff; margin-bottom: 15px; }
+        .card p { color: var(--text-muted); font-size: 1.05rem; }
+
+        /* GRAND FINALE EXPLOSIVO */
+        .grand-finale { text-align: center; padding: 100px 20px 150px; position: relative; }
+        .grand-finale::before {
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80vw; height: 80vw; max-width: 800px; max-height: 800px;
+            background: radial-gradient(circle, rgba(255, 77, 109, 0.15) 0%, transparent 70%); z-index: -1;
+        }
+        .grand-finale h1 { font-size: 4rem; color: #fff; line-height: 1.2; margin-bottom: 30px; text-shadow: 0 0 20px rgba(255, 77, 109, 0.8), 0 0 40px rgba(255, 77, 109, 0.4); }
+        .grand-finale .msg { font-size: 1.6rem; color: var(--pink-soft); max-width: 900px; margin: 0 auto 40px; font-weight: 600; }
+        .signature-box { margin-top: 60px; }
+        .signature-box .script { font-size: 4.5rem; color: var(--gold-accent); text-shadow: 0 0 20px rgba(247, 174, 248, 0.5); }
+
+        /* WIDGET DE MÚSICA */
+        .music-btn {
+            position: fixed; bottom: 30px; right: 30px; background: rgba(20, 8, 14, 0.8);
+            backdrop-filter: blur(15px); padding: 10px 25px 10px 10px; border-radius: 50px;
+            display: flex; align-items: center; gap: 15px; z-index: 9999;
+            border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.8); cursor: pointer; transition: all 0.3s;
+        }
+        .music-btn:hover { transform: scale(1.05); border-color: var(--pink-neon); }
+        .record { width: 45px; height: 45px; background: #111; border-radius: 50%; display: flex; justify-content: center; align-items: center; position: relative; box-shadow: inset 0 0 10px #000; border: 2px solid #333; animation: spin 3s linear infinite; animation-play-state: paused; }
+        .record::before { content: ''; width: 14px; height: 14px; background: var(--pink-neon); border-radius: 50%; border: 2px solid #fff; }
+        .record.playing { animation-play-state: running; }
+        .record i { position: absolute; color: white; font-size: 1rem; z-index: 5; text-shadow: 0 0 5px #000; }
+        .m-info p { margin: 0; font-size: 0.9rem; font-weight: bold; color: #fff; }
+        .m-info span { font-size: 0.75rem; color: var(--pink-soft); }
+
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 4rem; }
+            .hero .subtitle { font-size: 1.8rem; }
+            .split-section { flex-direction: column !important; gap: 40px; margin-bottom: 100px; }
+            .text-content { padding: 30px 20px; }
+            .cinematic-letter { padding: 40px 20px; margin-bottom: 100px; }
+            .big-quote { font-size: 1.5rem; }
+            .promises-box { padding: 40px 20px; }
+            .promises-box h2 { font-size: 2.5rem; }
+            .video-showcase h2 { font-size: 2.8rem; }
+            .grand-finale h1 { font-size: 2.5rem; }
+            .signature-box .script { font-size: 3.5rem; }
+            .music-btn { bottom: 20px; right: 20px; padding: 8px 15px 8px 8px; }
+            .record { width: 35px; height: 35px; }
+            .eye-photo { width: 95vw; }
+            .counter-box span { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="magic-dust"></div>
+
+    <!-- ÁUDIOS -->
+    <audio id="bg-audio-intro" loop>
+        <source src="https://raw.githubusercontent.com/johndks4/Maribella/main/ssstik.io_1780878137804.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="bg-audio-main" loop>
+        <source src="https://raw.githubusercontent.com/johndks4/workmdz/main/Cazuza%20-%20Exagerado%20(%C3%81udio%20Oficial)%20-%20Cazuza%20(youtube).mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- ESTÁGIO 1: TELA INICIAL -->
+    <div id="landing-page">
+        <div class="eye-container">
+            <img src="https://i.ibb.co/0jXyPyqH/IMG-20260607-WA0363.jpg" alt="O Olho Mais Lindo" class="eye-photo">
+        </div>
+
+        <button class="play-home-btn" id="btn-play-intro" onclick="playIntroMusic()"><i class="fa-solid fa-music"></i> Tocar Música</button>
+
+        <div class="counter-container">
+            <div class="counter-title" id="counter-title">Contagem para o nosso dia ❤️</div>
+            <div class="counter">
+                <div class="counter-box"><span id="days">00</span><label>Dias</label></div>
+                <div class="counter-box"><span id="hours">00</span><label>Horas</label></div>
+                <div class="counter-box"><span id="minutes">00</span><label>Minutos</label></div>
+                <div class="counter-box"><span id="seconds">00</span><label>Segundos</label></div>
+            </div>
+        </div>
+
+        <button class="btn-acessar" id="btn-acessar">ACESSAR</button>
+    </div>
+
+    <!-- WIDGET DE MÚSICA MAIN -->
+    <div class="music-btn" id="music-widget" onclick="toggleMainAudio()" style="display: none;">
+        <div class="record" id="vinyl-player"><i class="fa-solid fa-play" id="playIcon"></i></div>
+        <div class="m-info">
+            <p>Nossa Música</p>
+            <span id="music-status">Tocando agora 💖</span>
+        </div>
+    </div>
+
+    <!-- ESTÁGIO 2: CONTEÚDO PRINCIPAL (ULTIMATE) -->
+    <div id="main-content">
+        
+        <header class="hero">
+            <div class="hero-bg"></div>
+            <h3 class="reveal">12 de Junho</h3>
+            <h1 class="script reveal" style="transition-delay: 0.2s;">Feliz Dia dos Namorados</h1>
+            <p class="subtitle script reveal" style="transition-delay: 0.4s;">Para Maribella</p>
+        </header>
+
+        <div class="container">
+            
+            <!-- VÍDEO CINEMATIC -->
+            <div class="video-showcase reveal">
+                <h2 class="script">Minha Princesinha 👑</h2>
+                <p>A mais bela de todo o universo, brilhando em cada detalhe.</p>
+                <div class="phone-frame">
+                    <video autoplay loop muted playsinline>
+                        <source src="https://raw.githubusercontent.com/johndks4/Maribella/main/VID-20260607-WA0339.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+
+            <!-- CARTA 1: NENÉMZINHA -->
+            <div class="cinematic-letter reveal">
+                <i class="fa-solid fa-quote-left"></i>
+                <h3 class="script">MINHAA NENÉMMZINHAAA!!!</h3>
+                <p>EU TEE AMOOOOO de um jeito totalmente inexplicável e maravilhoso. Eu te amo porque meu coração chega a bater quando você fala que me ama. Eu te amo porque você virou meu lar, a minha morada, e faz parte da minha vida. Eu te amo, porque não quero mais ninguém, além de você.</p>
+                
+                <p>Eu te amo porque você coloriuuu minhaa lifee por completaa, eu te amo porque mesmo distante, não deixamos de nos amar, Eu te amo porque eu te amo e o que sinto, não quer explicar.</p>
+                
+                <h3 class="big-quote">"Eu te amo sem explicações, sem perguntas, e só com amor."</h3>
+                
+                <p>Eu te amo tanto que a única coisa que eu quero agora, é você, pra eu poder sentir o seu abraço no meu e dizer que.. Finalmente, EUUU TEE AMOOO MUITOOOOO.</p>
+            </div>
+
+            <!-- BLOCO DAS PROMESSAS -->
+            <div class="promises-box reveal">
+                <h2 class="script">EU PROMETOOOOOOOOOO E AMARRRRRRRR</h2>
+                <ul class="promises-list">
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo escolher você.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo te proteger.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo ser gentil com o seu coração.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo estar ao seu lado.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo ser fiel a você.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo te amar em voz alta.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo te amar em silêncio também.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo ser a sua paz.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo ser o seu lugar seguro.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo te ouvir.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo te entender.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo orar por você.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo ser honesto com você.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo ser paciente com você.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo crescer com você.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo rir com você.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo te segurar nos dias difíceis.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo te celebrar nos dias bons.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo nunca parar de lutar por nós.</li>
+                    <li><i class="fa-solid fa-heart"></i> Eu prometo continuar escolhendo este amor.</li>
+                </ul>
+                <div class="promise-finale">Eu prometo te amar. Plenamente. Para sempre.</div>
+            </div>
+
+            <!-- BLOCO LADO A LADO 1 -->
+            <div class="split-section reveal">
+                <div class="img-wrapper">
+                    <img src="https://i.ibb.co/PsRCn06F/IMG-20260531-WA0542.png" alt="Maribella">
+                </div>
+                <div class="text-content">
+                    <h2 class="script">Uma Promessa Real</h2>
+                    <p>Meu amor, eu tenho muito pra te falar, mas vou pelo principal: Eu sei que às vezes bate aquele medo em você de eu enjoar, mas tira isso da sua cabeça de uma vez por todas.</p>
+                    <p class="highlight">EUUU VOUUU TEE AMARR pelo resto das nossas vidas!</p>
+                    <p>O que eu mais quero é estar do seu lado, te fazer feliz e te dar absolutamente tudo o que você merece, porque você não é só um momento, você é pra vida toda.</p>
+                </div>
+            </div>
+
+            <!-- BLOCO LADO A LADO 2 -->
+            <div class="split-section reveal">
+                <div class="img-wrapper">
+                    <img src="https://i.ibb.co/pvj8vgRJ/IMG-20260531-WA0540.png" alt="O Nosso Futuro">
+                </div>
+                <div class="text-content">
+                    <h2 class="script">O Nosso Destino</h2>
+                    <p>Estou disposto a esperar o tempo que for necessário pra nós ficarmos juntos, por que eu quero que minha vida seja ao seu lado.</p>
+                    <p class="highlight">Você é minha FUTURA ESPOSA, obrigado por existir.</p>
+                    <p>Eu fiz uma escolha e decidi que quero que você seja a mulher que vai cuidar dos meus filhos; dos NOSSOS filhos.</p>
+                </div>
+            </div>
+
+            <!-- MOTIVOS (GRID) -->
+            <h2 class="reasons-title script reveal">Os Motivos do Meu Coração</h2>
+            <div class="grid-cards reveal">
+                <div class="card">
+                    <i class="fa-solid fa-face-grin-stars"></i>
+                    <h3 class="script">Seu Sorriso</h3>
+                    <p>Amo o jeito como ele ilumina qualquer dia nublado e afasta toda a tristeza do meu coração.</p>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-moon"></i>
+                    <h3 class="script">Fases da Lua</h3>
+                    <p>Eu te amo como cada fase da lua... porque cada obstáculo que passamos mostra que o nosso amor é real.</p>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-shield-heart"></i>
+                    <h3 class="script">Seu Cuidado</h3>
+                    <p>A delicadeza única, sua força e bondade que me inspiram a ser uma pessoa cada vez melhor.</p>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-infinity"></i>
+                    <h3 class="script">Para Sempre</h3>
+                    <p>Daqui a 20 anos eu ainda serei completamente APAIXONADO por você. Não me vejo sem você.</p>
+                </div>
+            </div>
+
+            <!-- GRAND FINALE -->
+            <div class="grand-finale reveal">
+                <h1 style="color: var(--pink-soft); font-size: 3rem; margin-bottom: 10px;">AMORRR DA MINHAA VIDAA, MINHAA PRINCESINHA LINDAAA😭🤍🤍</h1>
+                
+                <h1>EUUU TEE AMOOOOO COM TODAA MINHAA ALMAAAA E MEU SERR!! 🥹🤍🤍</h1>
+                
+                <h1 style="font-size: 2.5rem; color: var(--gold-accent); margin-top: 30px;">EUUU TEE AMOOO COM TODA MINHAA ALMAA, MEU SERRR E MEU CORAÇÃOOOOOOOO!!😭🤍🤍</h1>
+                
+                <div class="signature-box">
+                    <div class="script">Feliz Dia dos Namorados!</div>
+                    <p style="font-size: 1.5rem; color: var(--text-muted); margin-top: 15px;">De seu eterno amor e futuro marido, John.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // --- 1. CONTADOR PARA 12 DE JUNHO ---
+        const targetDate = new Date('2026-06-12T00:00:00').getTime(); 
+
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('days').innerText = "00";
+                document.getElementById('hours').innerText = "00";
+                document.getElementById('minutes').innerText = "00";
+                document.getElementById('seconds').innerText = "00";
+                document.getElementById('counter-title').innerText = "Feliz Dia dos Namorados! ❤️";
+                return;
+            }
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').innerText = days < 10 ? '0' + days : days;
+            document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
+            document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+        }, 1000);
+
+        // --- 2. LÓGICA DE ÁUDIO E TRANSIÇÃO ---
+        const audioIntro = document.getElementById('bg-audio-intro');
+        const audioMain = document.getElementById('bg-audio-main');
+        const btnPlayIntro = document.getElementById('btn-play-intro');
+        let isMainPlaying = false;
+
+        // Botão manual na home para iniciar a música do Tiktok
+        function playIntroMusic() {
+            audioIntro.play();
+            btnPlayIntro.innerText = "Música Tocando 💖";
+            btnPlayIntro.style.background = "var(--pink-neon)";
+            btnPlayIntro.style.color = "#fff";
+        }
+
+        const btnAcessar = document.getElementById('btn-acessar');
+        const landingPage = document.getElementById('landing-page');
+        const mainContent = document.getElementById('main-content');
+        const musicWidget = document.getElementById('music-widget');
+        const vinylPlayer = document.getElementById('vinyl-player');
+        const playIcon = document.getElementById('playIcon');
+
+        btnAcessar.addEventListener('click', () => {
+            landingPage.style.opacity = '0';
+            
+            // Pausa a música inicial e dá play no Cazuza
+            audioIntro.pause();
+            audioMain.play().then(() => {
+                isMainPlaying = true;
+                vinylPlayer.classList.add('playing');
+                playIcon.className = "fa-solid fa-pause";
+                musicWidget.style.display = 'flex';
+            }).catch(e => console.log("Erro ao tocar áudio:", e));
+
+            setTimeout(() => {
+                landingPage.style.display = 'none';
+                mainContent.style.display = 'block';
+                void mainContent.offsetWidth; 
+                mainContent.style.opacity = '1';
+                document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            }, 1000);
+        });
+
+        function toggleMainAudio() {
+            if(isMainPlaying) {
+                audioMain.pause();
+                vinylPlayer.classList.remove('playing');
+                playIcon.className = "fa-solid fa-play";
+                document.getElementById('music-status').innerText = 'Pausado';
+            } else {
+                audioMain.play();
+                vinylPlayer.classList.add('playing');
+                playIcon.className = "fa-solid fa-pause";
+                document.getElementById('music-status').innerText = 'Tocando agora 💖';
+            }
+            isMainPlaying = !isMainPlaying;
+        }
+
+        // --- 3. SCROLL ANIMATION ---
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+    </script>
+</body>
+</html>
